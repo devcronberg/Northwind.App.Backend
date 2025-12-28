@@ -1,6 +1,9 @@
 using System.Globalization;
+using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Northwind.App.Backend.Models;
 using Serilog;
@@ -32,6 +35,28 @@ try
     // Entity Framework - SQLite database (read-only in container)
     builder.Services.AddDbContext<NorthwindContext>(options =>
         options.UseSqlite(builder.Configuration.GetConnectionString("NorthwindDb")));
+
+    // JWT Authentication
+    var jwtSecret = builder.Configuration["Jwt:Secret"] ?? throw new InvalidOperationException("JWT Secret not configured");
+    var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "Northwind.App.Backend";
+    var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "Northwind.App.Frontend";
+    
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtIssuer,
+                ValidAudience = jwtAudience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
+                ClockSkew = TimeSpan.Zero
+            };
+        });
+    builder.Services.AddAuthorization();
 
     // Health checks
     builder.Services.AddHealthChecks();
@@ -65,12 +90,20 @@ try
         {
             Title = "Northwind.App.Backend",
             Version = "v1",
-            Description = "Northwind.App.Backend API",
-            Contact = new OpenApiContact
-            {
-                Name = "Repository",
-                Url = new Uri("https://github.com/devcronberg/Northwind.App.Backend")
-            }
+            Description = "Northwind.App.Backend API"
+        });
+        
+        // JWT Bearer authentication in Swagger
+        c.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            Description = "JWT Authorization header using the Bearer scheme."
+        });
+        c.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+        {
+            [new OpenApiSecuritySchemeReference("bearer", document)] = []
         });
     });
 
@@ -90,6 +123,10 @@ try
     app.UseSwaggerUI();
     app.UseRouting();
     app.UseCors();
+    
+    app.UseAuthentication();
+    app.UseAuthorization();
+    
     app.MapControllers();
 
     // Health check endpoints
