@@ -40,7 +40,7 @@ try
     var jwtSecret = builder.Configuration["Jwt:Secret"] ?? throw new InvalidOperationException("JWT Secret not configured");
     var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "Northwind.App.Backend";
     var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "Northwind.App.Frontend";
-    
+
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
@@ -92,7 +92,7 @@ try
             Version = "v1",
             Description = "Northwind.App.Backend API"
         });
-        
+
         // JWT Bearer authentication in Swagger
         c.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
         {
@@ -123,10 +123,10 @@ try
     app.UseSwaggerUI();
     app.UseRouting();
     app.UseCors();
-    
+
     app.UseAuthentication();
     app.UseAuthorization();
-    
+
     app.MapControllers();
 
     // Health check endpoints

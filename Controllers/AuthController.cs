@@ -49,8 +49,8 @@ public class AuthController : ControllerBase
     {
         _logger.LogInformation("Login attempt for user: {Username}", request.Username);
 
-        var user = _users.FirstOrDefault(u => 
-            u.Username.Equals(request.Username, StringComparison.OrdinalIgnoreCase) && 
+        var user = _users.FirstOrDefault(u =>
+            u.Username.Equals(request.Username, StringComparison.OrdinalIgnoreCase) &&
             u.Password == request.Password);
 
         if (user == null)
@@ -65,9 +65,9 @@ public class AuthController : ControllerBase
         }
 
         var tokens = GenerateTokens(user);
-        
+
         _logger.LogInformation("User {Username} logged in successfully", request.Username);
-        
+
         return Ok(tokens);
     }
 
@@ -123,9 +123,9 @@ public class AuthController : ControllerBase
 
         // Generate new tokens
         var tokens = GenerateTokens(user);
-        
+
         _logger.LogInformation("Token refreshed for user: {Username}", user.Username);
-        
+
         return Ok(tokens);
     }
 
@@ -174,7 +174,7 @@ public class AuthController : ControllerBase
         var refreshToken = GenerateRefreshToken();
 
         var refreshTokenExpDays = _configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays", 7);
-        
+
         _refreshTokens[refreshToken] = new RefreshTokenInfo
         {
             Username = user.Username,
