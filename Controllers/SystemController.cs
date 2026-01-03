@@ -23,8 +23,10 @@ public class SystemController : ControllerBase
 
     /// <summary>
     /// Liveness check - is the application alive?
+    /// Supports both GET and HEAD requests for container orchestration
     /// </summary>
     [HttpGet("health/live")]
+    [HttpHead("health/live")]
     [ProducesResponseType(200)]
     [ProducesResponseType(503)]
     public IActionResult LivenessCheck()
@@ -35,8 +37,10 @@ public class SystemController : ControllerBase
 
     /// <summary>
     /// Readiness check - is the application ready to receive traffic?
+    /// Supports both GET and HEAD requests for container orchestration
     /// </summary>
     [HttpGet("health/ready")]
+    [HttpHead("health/ready")]
     [ProducesResponseType(typeof(object), 200)]
     [ProducesResponseType(503)]
     public async Task<IActionResult> ReadinessCheck()
