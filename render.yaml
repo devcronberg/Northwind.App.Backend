@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: northwind-backend
+    runtime: docker
+    region: frankfurt  # Change to your preferred region: oregon, frankfurt, singapore, etc.
+    plan: free  # or starter, standard, pro
+    branch: main  # Change to your default branch name if different
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: Jwt__Secret
+        generateValue: true  # Auto-generates a secure random value
+      - key: Jwt__Issuer
+        value: Northwind.App.Backend
+      - key: Jwt__Audience
+        value: Northwind.App.Frontend
+      - key: Jwt__AccessTokenExpirationMinutes
+        value: 60
+      - key: Jwt__RefreshTokenExpirationDays
+        value: 7
+    healthCheckPath: /health/live
