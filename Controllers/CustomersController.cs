@@ -89,7 +89,7 @@ public class CustomersController : ControllerBase
     [SwaggerOperation(Summary = "Get all customers with orders", Description = "Returns paginated customers with their orders, sorted by highest revenue first")]
     [ProducesResponseType(typeof(IEnumerable<CustomerWithOrdersResponse>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<CustomerWithOrdersResponse>>> GetAllCustomersWithOrdersPublic(
-        [FromQuery] int skip = 0, 
+        [FromQuery] int skip = 0,
         [FromQuery] int take = 1000,
         [FromQuery] int maxOrdersPerCustomer = 10)
     {
@@ -113,7 +113,7 @@ public class CustomersController : ControllerBase
 
         // Then get full customer data with orders for those customers
         var result = new List<CustomerWithOrdersResponse>();
-        
+
         foreach (var customerId in customerIdsWithRevenue)
         {
             var customer = await _db.Customers
