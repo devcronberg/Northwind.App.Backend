@@ -84,16 +84,16 @@ or
 
 ### Public Customer Endpoints (No Authentication)
 
-| Endpoint                            | Method | Description                                       | Query Parameters                                       |
-| ----------------------------------- | ------ | ------------------------------------------------- | ------------------------------------------------------ |
-| `/api/public/customers`             | GET    | Get all customers (paginated)                     | `skip` (default: 0), `take` (default: 1000)            |
-| `/api/public/customers-with-orders` | GET    | Get all customers with orders (sorted by revenue) | `skip` (0), `take` (1000), `maxOrdersPerCustomer` (10) |
-| `/api/public/customers/{id}`        | GET    | Get customer by ID                                | -                                                      |
-| `/api/public/customers/{id}/orders` | GET    | Get customer with orders                          | `maxOrders` (default: 10)                              |
-| `/api/public/customers`             | POST   | Create new customer                               | -                                                      |
-| `/api/public/customers/{id}`        | PUT    | Update customer                                   | -                                                      |
-| `/api/public/customers/{id}`        | PATCH  | Partially update customer                         | -                                                      |
-| `/api/public/customers/{id}`        | DELETE | Delete customer                                   | -                                                      |
+| Endpoint                                | Method | Description                                          | Query Parameters                            |
+| --------------------------------------- | ------ | ---------------------------------------------------- | ------------------------------------------- |
+| `/api/public/customers`                 | GET    | Get all customers (paginated)                        | `skip` (default: 0), `take` (default: 1000) |
+| `/api/public/customers-with-revenue`    | GET    | Get all customers with revenue info (sorted by revenue) | `skip` (default: 0), `take` (default: 1000) |
+| `/api/public/customers/{id}`            | GET    | Get customer by ID                                   | -                                           |
+| `/api/public/customers/{id}/orders`     | GET    | Get customer with orders                             | `maxOrders` (default: 10)                   |
+| `/api/public/customers`                 | POST   | Create new customer                                  | -                                           |
+| `/api/public/customers/{id}`            | PUT    | Update customer                                      | -                                           |
+| `/api/public/customers/{id}`            | PATCH  | Partially update customer                            | -                                           |
+| `/api/public/customers/{id}`            | DELETE | Delete customer                                      | -                                           |
 
 ### Protected Customer Endpoints (Authentication Required)
 

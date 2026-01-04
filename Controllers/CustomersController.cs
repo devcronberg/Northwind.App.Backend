@@ -79,28 +79,26 @@ public class CustomersController : ControllerBase
     }
 
     /// <summary>
-    /// Get all customers with their orders sorted by revenue
+    /// Get all customers with total revenue information sorted by revenue
     /// </summary>
     /// <param name="skip">Number of customers to skip (default: 0)</param>
     /// <param name="take">Number of customers to return (default: 1000)</param>
-    /// <param name="maxOrdersPerCustomer">Maximum number of orders per customer (default: 10)</param>
-    [HttpGet("api/public/customers-with-orders")]
+    [HttpGet("api/public/customers-with-revenue")]
     [Tags("Public Customers")]
-    [SwaggerOperation(Summary = "Get all customers with orders", Description = "Returns paginated customers with their orders, sorted by highest revenue first")]
-    [ProducesResponseType(typeof(IEnumerable<CustomerWithOrdersResponse>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<CustomerWithOrdersResponse>>> GetAllCustomersWithOrdersPublic(
+    [SwaggerOperation(Summary = "Get all customers with revenue", Description = "Returns paginated customers with order count and total revenue, sorted by highest revenue first")]
+    [ProducesResponseType(typeof(IEnumerable<CustomerWithRevenueResponse>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<CustomerWithRevenueResponse>>> GetAllCustomersWithRevenuePublic(
         [FromQuery] int skip = 0,
-        [FromQuery] int take = 1000,
-        [FromQuery] int maxOrdersPerCustomer = 10)
+        [FromQuery] int take = 1000)
     {
-        _logger.LogInformation("Getting customers with orders, skip={Skip}, take={Take}, maxOrdersPerCustomer={MaxOrdersPerCustomer} (public)", skip, take, maxOrdersPerCustomer);
+        _logger.LogInformation("Getting customers with revenue, skip={Skip}, take={Take} (public)", skip, take);
 
-        // First get customers sorted by revenue
-        var customerIdsWithRevenue = await _db.Customers
+        var result = await _db.Customers
             .AsNoTracking()
-            .Select(c => new
+            .Select(c => new CustomerWithRevenueResponse
             {
-                CustomerId = c.CustomerId,
+                Customer = c,
+                TotalOrderCount = c.Orders.Count,
                 TotalRevenue = c.Orders
                     .SelectMany(o => o.OrderDetails)
                     .Sum(od => (od.Product!.Price ?? 0) * (od.Quantity ?? 0))
@@ -108,43 +106,7 @@ public class CustomersController : ControllerBase
             .OrderByDescending(x => x.TotalRevenue)
             .Skip(skip)
             .Take(take)
-            .Select(x => x.CustomerId)
             .ToListAsync();
-
-        // Then get full customer data with orders for those customers
-        var result = new List<CustomerWithOrdersResponse>();
-
-        foreach (var customerId in customerIdsWithRevenue)
-        {
-            var customer = await _db.Customers
-                .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.CustomerId == customerId);
-
-            if (customer != null)
-            {
-                var orders = await _db.Orders
-                    .AsNoTracking()
-                    .Where(o => o.CustomerId == customerId)
-                    .OrderByDescending(o => o.OrderDate)
-                    .Take(maxOrdersPerCustomer)
-                    .Include(o => o.Employee)
-                    .Include(o => o.Shipper)
-                    .Include(o => o.OrderDetails)
-                        .ThenInclude(od => od.Product!)
-                            .ThenInclude(p => p.Supplier)
-                    .ToListAsync();
-
-                var totalOrderCount = await _db.Orders.CountAsync(o => o.CustomerId == customerId);
-
-                result.Add(new CustomerWithOrdersResponse
-                {
-                    Customer = customer,
-                    Orders = orders,
-                    TotalOrderCount = totalOrderCount,
-                    ReturnedOrderCount = orders.Count
-                });
-            }
-        }
 
         return Ok(result);
     }
