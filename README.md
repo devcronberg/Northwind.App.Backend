@@ -1,45 +1,45 @@
 # Northwind.App.Backend
 
-A modern ASP.NET Core REST API backend application serving as a demo and reference implementation for best practices. Built with .NET 10, Entity Framework Core, and JWT authentication, this project demonstrates a complete web API with Docker support and cloud deployment.
+En moderne ASP.NET Core REST API backend-applikation, der fungerer som en demo og reference-implementering af bedste praksis. Bygget med .NET 10, Entity Framework Core og JWT-autentificering demonstrerer dette projekt en komplet web-API med Docker-understøttelse og cloud-deployment.
 
-## 🌟 Features
+## 🌟 Funktioner
 
-- ✅ **RESTful API** - Complete CRUD operations for Northwind database entities
-- ✅ **JWT Authentication** - Secure endpoints with access and refresh tokens
-- ✅ **Entity Framework Core** - SQLite database with code-first approach
-- ✅ **OpenAPI/Swagger** - Interactive API documentation
-- ✅ **Structured Logging** - Serilog with console output for containers
-- ✅ **Health Checks** - Kubernetes-ready liveness and readiness probes
-- ✅ **Problem Details (RFC 7807)** - Consistent error responses
-- ✅ **Docker Support** - Multi-stage build with security best practices
-- ✅ **Cloud Ready** - Deployed on Render.com with automatic deployments
+- ✅ **RESTful API** - Komplette CRUD-operationer for Northwind database-entiteter
+- ✅ **JWT-autentificering** - Sikre endpoints med access- og refresh-tokens
+- ✅ **Entity Framework Core** - SQLite-database med code-first tilgang
+- ✅ **OpenAPI/Swagger** - Interaktiv API-dokumentation
+- ✅ **Struktureret Logging** - Serilog med konsol-output til containers
+- ✅ **Health Checks** - Kubernetes-klar liveness og readiness probes
+- ✅ **Problem Details (RFC 7807)** - Konsistente fejlsvar
+- ✅ **Docker-understøttelse** - Multi-stage build med sikkerhedsbedste praksis
+- ✅ **Cloud Ready** - Deployed på Render.com med automatiske deployments
 
 ## 🚀 Live Demo
 
-The API is deployed and accessible at:
+API'et er deployed og tilgængeligt på:
 
 **🔗 [https://northwind-backend-b088.onrender.com](https://northwind-backend-b088.onrender.com)**
 
-> **⚠️ Note about Render.com Free Tier:**  
-> This application is hosted on Render's free tier, which automatically spins down after 15 minutes of inactivity. The first request after inactivity may take **30-50 seconds** to respond while the service spins back up. Subsequent requests will be fast. This is normal behavior for free-tier deployments.
+> **⚠️ Bemærkning om Render.com Free Tier:**  
+> Denne applikation hostes på Render's gratis tier, som automatisk lukker ned efter 15 minutters inaktivitet. Den første forespørgsel efter inaktivitet kan tage **30-50 sekunder** at svare, mens tjenesten starter op igen. Efterfølgende forespørgsler vil være hurtige. Dette er normal adfærd for free-tier deployments.
 
-### Quick Links
+### Hurtige Links
 
 - **Swagger UI**: [https://northwind-backend-b088.onrender.com/swagger](https://northwind-backend-b088.onrender.com/swagger)
 - **Health Check**: [https://northwind-backend-b088.onrender.com/health/live](https://northwind-backend-b088.onrender.com/health/live)
 - **API Version**: [https://northwind-backend-b088.onrender.com/version](https://northwind-backend-b088.onrender.com/version)
 
-## 🛠️ Technology Stack
+## 🛠️ Teknologi Stack
 
-- **[.NET 10](https://dotnet.microsoft.com/)** - Latest .NET framework
-- **[ASP.NET Core Web API](https://docs.microsoft.com/aspnet/core/)** - High-performance web framework
-- **[Entity Framework Core](https://docs.microsoft.com/ef/core/)** - Modern ORM for .NET
-- **[SQLite](https://www.sqlite.org/)** - Lightweight file-based database
-- **[JWT Bearer Authentication](https://jwt.io/)** - Industry-standard token authentication
-- **[Serilog](https://serilog.net/)** - Structured logging library
-- **[Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)** - OpenAPI/Swagger tooling
-- **[Docker](https://www.docker.com/)** - Containerization platform
-- **[Render.com](https://render.com/)** - Cloud platform for deployment
+- **[.NET 10](https://dotnet.microsoft.com/)** - Nyeste .NET framework
+- **[ASP.NET Core Web API](https://docs.microsoft.com/aspnet/core/)** - Højtydende web framework
+- **[Entity Framework Core](https://docs.microsoft.com/ef/core/)** - Moderne ORM til .NET
+- **[SQLite](https://www.sqlite.org/)** - Letvægts filbaseret database
+- **[JWT Bearer Authentication](https://jwt.io/)** - Industristandard token-autentificering
+- **[Serilog](https://serilog.net/)** - Struktureret logging-bibliotek
+- **[Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)** - OpenAPI/Swagger-værktøjer
+- **[Docker](https://www.docker.com/)** - Containeriserings-platform
+- **[Render.com](https://render.com/)** - Cloud-platform til deployment
 
 ## 📚 API Endpoints
 
