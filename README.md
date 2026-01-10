@@ -45,27 +45,27 @@ API'et er deployed og tilgængeligt på:
 
 ### System Endpoints
 
-| Endpoint        | Method   | Description             | Auth Required |
-| --------------- | -------- | ----------------------- | ------------- |
-| `/`             | GET      | Redirects to Swagger UI | No            |
-| `/health`       | GET      | Basic health check      | No            |
-| `/health/live`  | GET/HEAD | Liveness probe          | No            |
-| `/health/ready` | GET/HEAD | Readiness probe         | No            |
-| `/version`      | GET      | API version             | No            |
-| `/config`       | GET      | Runtime configuration   | No            |
-| `/test`         | GET      | Echo test endpoint      | No            |
-| `/test/error`   | GET      | Test error handling     | No            |
-| `/swagger`      | GET      | API documentation       | No            |
+| Endpoint        | Method   | Beskrivelse                   | Kræver Auth |
+| --------------- | -------- | ----------------------------- | ----------- |
+| `/`             | GET      | Omdirigerer til Swagger UI    | Nej         |
+| `/health`       | GET      | Basis health check            | Nej         |
+| `/health/live`  | GET/HEAD | Liveness probe                | Nej         |
+| `/health/ready` | GET/HEAD | Readiness probe               | Nej         |
+| `/version`      | GET      | API version                   | Nej         |
+| `/config`       | GET      | Runtime-konfiguration         | Nej         |
+| `/test`         | GET      | Echo test endpoint            | Nej         |
+| `/test/error`   | GET      | Test fejlhåndtering           | Nej         |
+| `/swagger`      | GET      | API-dokumentation             | Nej         |
 
-### Authentication Endpoints
+### Autentificerings-Endpoints
 
-| Endpoint               | Method | Description            | Auth Required |
-| ---------------------- | ------ | ---------------------- | ------------- |
-| `/api/auth/login`      | POST   | Login with credentials | No            |
-| `/api/auth/refresh`    | POST   | Refresh access token   | No            |
-| `/api/auth/logout`     | POST   | Logout current session | Yes           |
-| `/api/auth/logout-all` | POST   | Logout all sessions    | Yes           |
-| `/api/auth/me`         | GET    | Get current user info  | Yes           |
+| Endpoint               | Method | Beskrivelse                 | Kræver Auth |
+| ---------------------- | ------ | --------------------------- | ----------- |
+| `/api/auth/login`      | POST   | Login med credentials       | Nej         |
+| `/api/auth/refresh`    | POST   | Forny access token          | Nej         |
+| `/api/auth/logout`     | POST   | Logout aktuel session       | Ja          |
+| `/api/auth/logout-all` | POST   | Logout alle sessioner       | Ja          |
+| `/api/auth/me`         | GET    | Hent aktuel brugerinfo      | Ja          |
 
 **Demo Credentials:**
 ```json
@@ -82,71 +82,71 @@ or
 }
 ```
 
-### Public Customer Endpoints (No Authentication)
+### Offentlige Kunde-Endpoints (Ingen Autentificering)
 
-| Endpoint                             | Method | Description                                             | Query Parameters                            |
-| ------------------------------------ | ------ | ------------------------------------------------------- | ------------------------------------------- |
-| `/api/public/customers`              | GET    | Get all customers (paginated)                           | `skip` (default: 0), `take` (default: 1000) |
-| `/api/public/customers-with-revenue` | GET    | Get all customers with revenue info (sorted by revenue) | `skip` (default: 0), `take` (default: 1000) |
-| `/api/public/customers/{id}`         | GET    | Get customer by ID                                      | -                                           |
-| `/api/public/customers/{id}/orders`  | GET    | Get customer with orders                                | `maxOrders` (default: 10)                   |
-| `/api/public/customers`              | POST   | Create new customer                                     | -                                           |
-| `/api/public/customers/{id}`         | PUT    | Update customer                                         | -                                           |
-| `/api/public/customers/{id}`         | PATCH  | Partially update customer                               | -                                           |
-| `/api/public/customers/{id}`         | DELETE | Delete customer                                         | -                                           |
+| Endpoint                             | Method | Beskrivelse                                           | Query Parameters                            |
+| ------------------------------------ | ------ | ----------------------------------------------------- | ------------------------------------------- |
+| `/api/public/customers`              | GET    | Hent alle kunder (pagineret)                          | `skip` (standard: 0), `take` (standard: 1000) |
+| `/api/public/customers-with-revenue` | GET    | Hent alle kunder med omsætningsinfo (sorteret)        | `skip` (standard: 0), `take` (standard: 1000) |
+| `/api/public/customers/{id}`         | GET    | Hent kunde efter ID                                   | -                                           |
+| `/api/public/customers/{id}/orders`  | GET    | Hent kunde med ordrer                                 | `maxOrders` (standard: 10)                  |
+| `/api/public/customers`              | POST   | Opret ny kunde                                        | -                                           |
+| `/api/public/customers/{id}`         | PUT    | Opdater kunde                                         | -                                           |
+| `/api/public/customers/{id}`         | PATCH  | Delvist opdater kunde                                 | -                                           |
+| `/api/public/customers/{id}`         | DELETE | Slet kunde                                            | -                                           |
 
-### Protected Customer Endpoints (Authentication Required)
+### Beskyttede Kunde-Endpoints (Kræver Autentificering)
 
-| Endpoint         | Method | Description                      | Query Parameters                            |
-| ---------------- | ------ | -------------------------------- | ------------------------------------------- |
-| `/api/customers` | GET    | Get all customers (requires JWT) | `skip` (default: 0), `take` (default: 1000) |
+| Endpoint         | Method | Beskrivelse                       | Query Parameters                            |
+| ---------------- | ------ | --------------------------------- | ------------------------------------------- |
+| `/api/customers` | GET    | Hent alle kunder (kræver JWT)     | `skip` (standard: 0), `take` (standard: 1000) |
 
-## 🏃 Getting Started
+## 🏃 Kom i Gang
 
-### Prerequisites
+### Forudsætninger
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [Git](https://git-scm.com/)
-- (Optional) [Docker Desktop](https://www.docker.com/products/docker-desktop)
-- (Optional) [Visual Studio Code](https://code.visualstudio.com/) or [Visual Studio 2022](https://visualstudio.microsoft.com/)
+- (Valgfrit) [Docker Desktop](https://www.docker.com/products/docker-desktop)
+- (Valgfrit) [Visual Studio Code](https://code.visualstudio.com/) eller [Visual Studio 2022](https://visualstudio.microsoft.com/)
 
-### Local Development
+### Lokal Udvikling
 
-1. **Clone the repository**
+1. **Klon repository**
    ```bash
    git clone https://github.com/devcronberg/Northwind.App.Backend.git
    cd Northwind.App.Backend
    ```
 
-2. **Restore dependencies**
+2. **Gendan dependencies**
    ```bash
    dotnet restore
    ```
 
-3. **Run the application**
+3. **Kør applikationen**
    ```bash
    dotnet run
    ```
 
-4. **Open Swagger UI**
+4. **Åbn Swagger UI**
    
-   Navigate to: [http://localhost:5000/swagger](http://localhost:5000/swagger)
+   Naviger til: [http://localhost:5000/swagger](http://localhost:5000/swagger)
 
-### Testing the API
+### Test API'et
 
-#### Example 1: Get all customers (no authentication)
+#### Eksempel 1: Hent alle kunder (ingen autentificering)
 ```bash
 curl http://localhost:5000/api/public/customers
 ```
 
-#### Example 2: Login and get JWT token
+#### Eksempel 2: Login og få JWT token
 ```bash
 curl -X POST http://localhost:5000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"admin","password":"admin"}'
 ```
 
-Response:
+Svar:
 ```json
 {
   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -155,93 +155,93 @@ Response:
 }
 ```
 
-#### Example 3: Access protected endpoint with JWT
+#### Eksempel 3: Tilgå beskyttet endpoint med JWT
 ```bash
 curl http://localhost:5000/api/customers \
-  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+  -H "Authorization: Bearer DIN_ACCESS_TOKEN"
 ```
 
 ## 🐳 Docker
 
-### Build Docker Image
+### Byg Docker Image
 ```bash
 docker build -t northwind-backend .
 ```
 
-### Run Container
+### Kør Container
 ```bash
 docker run -p 8080:8080 northwind-backend
 ```
 
-The API will be available at [http://localhost:8080](http://localhost:8080)
+API'et vil være tilgængeligt på [http://localhost:8080](http://localhost:8080)
 
-### Docker Image Details
+### Docker Image Detaljer
 
-- **Multi-stage build** - Optimized for size and security
-- **Non-root user** - Runs as `appuser` (UID 1001)
-- **Size** - Approximately 220MB (runtime only)
+- **Multi-stage build** - Optimeret til størrelse og sikkerhed
+- **Non-root bruger** - Kører som `appuser` (UID 1001)
+- **Størrelse** - Cirka 220MB (kun runtime)
 - **Base images**:
   - Build: `mcr.microsoft.com/dotnet/sdk:10.0`
   - Runtime: `mcr.microsoft.com/dotnet/aspnet:10.0`
 
-## ☁️ Deployment to Render.com
+## ☁️ Deployment til Render.com
 
-This project includes a `render.yaml` configuration file for easy deployment to [Render.com](https://render.com/).
+Dette projekt inkluderer en `render.yaml` konfigurationsfil til nem deployment til [Render.com](https://render.com/).
 
-### What is Render.com?
+### Hvad er Render.com?
 
-Render is a modern cloud platform that makes it easy to deploy web applications, APIs, databases, and more. It offers:
+Render er en moderne cloud-platform, der gør det nemt at deploye web-applikationer, API'er, databaser og mere. Den tilbyder:
 
-- **Free Tier** - Perfect for demos and small projects
-- **Automatic Deployments** - Deploys automatically when you push to GitHub
-- **Docker Support** - Native Docker container deployment
-- **HTTPS by default** - Free SSL certificates
-- **Health Checks** - Built-in monitoring
-- **Zero DevOps** - No server management required
+- **Free Tier** - Perfekt til demoer og små projekter
+- **Automatiske Deployments** - Deployer automatisk når du pusher til GitHub
+- **Docker-understøttelse** - Native Docker container deployment
+- **HTTPS som standard** - Gratis SSL-certifikater
+- **Health Checks** - Indbygget overvågning
+- **Zero DevOps** - Ingen server-administration påkrævet
 
-### Deploy to Render
+### Deploy til Render
 
-1. **Push to GitHub**
+1. **Push til GitHub**
    ```bash
    git add .
    git commit -m "Initial commit"
    git push origin main
    ```
 
-2. **Create Render Account**
-   - Sign up at [render.com](https://render.com)
-   - Connect your GitHub account
+2. **Opret Render-konto**
+   - Tilmeld dig på [render.com](https://render.com)
+   - Tilslut din GitHub-konto
 
-3. **Deploy using Blueprint**
-   - Click "New +" → "Blueprint"
-   - Select this repository
-   - Render will detect `render.yaml` and configure automatically
-   - Click "Apply"
+3. **Deploy med Blueprint**
+   - Klik "New +" → "Blueprint"
+   - Vælg dette repository
+   - Render vil detektere `render.yaml` og konfigurere automatisk
+   - Klik "Apply"
 
-4. **Wait for deployment** (5-10 minutes first time)
-   - Build logs will show Docker build progress
-   - Service will be available at `https://your-app-name.onrender.com`
+4. **Vent på deployment** (5-10 minutter første gang)
+   - Build logs viser Docker build fremskridt
+   - Tjenesten vil være tilgængelig på `https://your-app-name.onrender.com`
 
-### Render Free Tier Behavior
+### Render Free Tier Adfærd
 
-The free tier includes:
-- ✅ 750 hours/month of runtime
-- ✅ Automatic HTTPS
-- ✅ Automatic deployments from GitHub
-- ⚠️ Spins down after 15 minutes of inactivity
-- ⚠️ Cold start takes 30-50 seconds
+Den gratis tier inkluderer:
+- ✅ 750 timer/måned runtime
+- ✅ Automatisk HTTPS
+- ✅ Automatiske deployments fra GitHub
+- ⚠️ Lukker ned efter 15 minutters inaktivitet
+- ⚠️ Cold start tager 30-50 sekunder
 
-**Tip:** For production use, upgrade to a paid plan ($7/month) to eliminate spin-down and get:
-- Always-on service (no cold starts)
-- More RAM and CPU
-- Faster builds
+**Tip:** Til produktion, opgrader til en betalt plan ($7/måned) for at eliminere nedlukning og få:
+- Altid-på tjeneste (ingen cold starts)
+- Mere RAM og CPU
+- Hurtigere builds
 - Support
 
-## ⚙️ Configuration
+## ⚙️ Konfiguration
 
-Configuration is managed through `appsettings.json` and environment variables.
+Konfiguration håndteres gennem `appsettings.json` og miljøvariabler.
 
-### JWT Settings
+### JWT Indstillinger
 
 ```json
 {
@@ -255,10 +255,10 @@ Configuration is managed through `appsettings.json` and environment variables.
 }
 ```
 
-### Environment Variables (for Production)
+### Miljøvariabler (til Produktion)
 
 ```bash
-# JWT Configuration
+# JWT Konfiguration
 Jwt__Secret=your-production-secret-key
 Jwt__Issuer=Northwind.App.Backend
 Jwt__Audience=Northwind.App.Frontend
@@ -268,127 +268,127 @@ ASPNETCORE_ENVIRONMENT=Production
 ASPNETCORE_URLS=http://+:8080
 ```
 
-**⚠️ Security Note:** Never commit secrets to Git. Use environment variables or secret management services in production.
+**⚠️ Sikkerhedsbemærkning:** Commit aldrig secrets til Git. Brug miljøvariabler eller secret management services i produktion.
 
-## 📁 Project Structure
+## 📁 Projektstruktur
 
 ```
 Northwind.App.Backend/
 ├── Controllers/                      # API Controllers
 │   ├── SystemController.cs           # System endpoints
-│   ├── AuthController.cs             # Authentication
-│   ├── CustomersController.cs        # Protected endpoints
-│   └── PublicCustomersController.cs  # Public endpoints
+│   ├── AuthController.cs             # Autentificering
+│   ├── CustomersController.cs        # Beskyttede endpoints
+│   └── PublicCustomersController.cs  # Offentlige endpoints
 ├── Models/
-│   ├── EF/                           # Entity Framework models
+│   ├── EF/                           # Entity Framework modeller
 │   │   ├── NorthwindContext.cs       # Database context
-│   │   ├── Customer.cs               # Customer entity
-│   │   ├── Order.cs                  # Order entity
-│   │   └── [other entities]
-│   └── MVC/                          # Legacy folder structure
+│   │   ├── Customer.cs               # Kunde entitet
+│   │   ├── Order.cs                  # Ordre entitet
+│   │   └── [andre entiteter]
+│   └── MVC/                          # Legacy mappestruktur
 ├── Assets/
 │   └── Northwind.db                  # SQLite database
-├── Program.cs                        # Application entry point
-├── appsettings.json                  # Configuration
-├── Dockerfile                        # Docker build configuration
-├── .dockerignore                     # Docker exclusions
+├── Program.cs                        # Applikations entry point
+├── appsettings.json                  # Konfiguration
+├── Dockerfile                        # Docker build konfiguration
+├── .dockerignore                     # Docker ekskluderinger
 ├── render.yaml                       # Render.com deployment config
 └── .github/
-    └── copilot-instructions.md       # AI assistant instructions
+    └── copilot-instructions.md       # AI assistent instruktioner
 ```
 
-## 🔐 Authentication
+## 🔐 Autentificering
 
-This API uses JWT (JSON Web Tokens) for authentication.
+Dette API bruger JWT (JSON Web Tokens) til autentificering.
 
-### Authentication Flow
+### Autentificerings-flow
 
-1. **Login** - POST credentials to `/api/auth/login`
-2. **Receive Tokens** - Get `accessToken` and `refreshToken`
-3. **Use Access Token** - Include in `Authorization: Bearer {token}` header
-4. **Refresh Token** - When access token expires, use refresh token to get new one
-5. **Logout** - Invalidate tokens via `/api/auth/logout`
+1. **Login** - POST credentials til `/api/auth/login`
+2. **Modtag Tokens** - Få `accessToken` og `refreshToken`
+3. **Brug Access Token** - Inkluder i `Authorization: Bearer {token}` header
+4. **Forny Token** - Når access token udløber, brug refresh token til at få en ny
+5. **Logout** - Invalider tokens via `/api/auth/logout`
 
-### Using JWT in Swagger
+### Brug JWT i Swagger
 
-1. Click "Authorize" button in Swagger UI
-2. Enter: `Bearer YOUR_ACCESS_TOKEN`
-3. Click "Authorize"
-4. Test protected endpoints
+1. Klik "Authorize" knappen i Swagger UI
+2. Indtast: `Bearer DIN_ACCESS_TOKEN`
+3. Klik "Authorize"
+4. Test beskyttede endpoints
 
-### Token Expiration
+### Token Udløb
 
-- **Access Token**: 60 minutes (configurable)
-- **Refresh Token**: 7 days (configurable)
+- **Access Token**: 60 minutter (konfigurerbar)
+- **Refresh Token**: 7 dage (konfigurerbar)
 
-## 🧪 Testing
+## 🧪 Test
 
-### Using Swagger UI
+### Brug af Swagger UI
 
-The easiest way to test the API:
+Den nemmeste måde at teste API'et på:
 
-1. Navigate to `/swagger`
-2. Try the public endpoints (no authentication needed)
-3. Login via `/api/auth/login` to get a JWT token
-4. Click "Authorize" and paste the token
-5. Test protected endpoints
+1. Naviger til `/swagger`
+2. Prøv de offentlige endpoints (ingen autentificering nødvendig)
+3. Login via `/api/auth/login` for at få et JWT token
+4. Klik "Authorize" og indsæt tokenet
+5. Test beskyttede endpoints
 
-### Using cURL
+### Brug af cURL
 
-See examples in the "Testing the API" section above.
+Se eksempler i "Test API'et" sektionen ovenfor.
 
-### Using Postman
+### Brug af Postman
 
-1. Import the API by pasting the Swagger JSON URL:
+1. Importer API'et ved at indsætte Swagger JSON URL'en:
    ```
    https://northwind-backend-b088.onrender.com/swagger/v1/swagger.json
    ```
-2. Create an environment with `baseUrl` variable
-3. Test endpoints with authentication flow
+2. Opret et environment med `baseUrl` variabel
+3. Test endpoints med autentificerings-flow
 
-## 📝 Best Practices Demonstrated
+## 📝 Demonstrerede Best Practices
 
-This project demonstrates:
+Dette projekt demonstrerer:
 
 - ✅ **Clean Architecture** - Separation of concerns
-- ✅ **Async/Await** - Proper async programming patterns
-- ✅ **Error Handling** - Problem Details (RFC 7807) standard
-- ✅ **Security** - JWT authentication, non-root Docker user
-- ✅ **Logging** - Structured logging with Serilog
-- ✅ **Documentation** - OpenAPI/Swagger with XML comments
-- ✅ **Health Checks** - Kubernetes-ready probes
-- ✅ **CORS** - Configured for cross-origin requests
+- ✅ **Async/Await** - Korrekte async programmeringsmønstre
+- ✅ **Fejlhåndtering** - Problem Details (RFC 7807) standard
+- ✅ **Sikkerhed** - JWT autentificering, non-root Docker bruger
+- ✅ **Logging** - Struktureret logging med Serilog
+- ✅ **Dokumentation** - OpenAPI/Swagger med XML kommentarer
+- ✅ **Health Checks** - Kubernetes-klar probes
+- ✅ **CORS** - Konfigureret til cross-origin requests
 - ✅ **Docker** - Multi-stage builds, layer caching
-- ✅ **Cloud Native** - Container-ready, 12-factor app principles
+- ✅ **Cloud Native** - Container-klar, 12-factor app principper
 
-## 🤝 Contributing
+## 🤝 Bidrag
 
-This is a demo project for learning purposes. Feel free to:
+Dette er et demo-projekt til læringsformål. Du er velkommen til at:
 
-- Fork the repository
-- Create feature branches
-- Submit pull requests
-- Report issues
-- Suggest improvements
+- Forke repository
+- Oprette feature branches
+- Indsende pull requests
+- Rapportere issues
+- Foreslå forbedringer
 
-## 📄 License
+## 📄 Licens
 
-This project is open source and available for educational purposes.
+Dette projekt er open source og tilgængeligt til uddannelsesformål.
 
-## 🙏 Acknowledgments
+## 🙏 Anerkendelser
 
-- **Northwind Database** - Classic sample database from Microsoft
-- **ASP.NET Core Team** - For the excellent framework
-- **Render.com** - For easy cloud hosting
+- **Northwind Database** - Klassisk sample database fra Microsoft
+- **ASP.NET Core Team** - For det fremragende framework
+- **Render.com** - For nem cloud hosting
 
-## 📞 Contact & Support
+## 📞 Kontakt & Support
 
 - **Repository**: [https://github.com/devcronberg/Northwind.App.Backend](https://github.com/devcronberg/Northwind.App.Backend)
 - **Live Demo**: [https://northwind-backend-b088.onrender.com](https://northwind-backend-b088.onrender.com)
-- **Documentation**: Available at `/swagger` endpoint
+- **Dokumentation**: Tilgængelig på `/swagger` endpoint
 
 ---
 
-**Happy Coding! 🚀**
+**God Kodning! 🚀**
 
-*This is a demo application for educational purposes. For production use, implement proper user management, database persistence, rate limiting, and security hardening.*
+*Dette er en demo-applikation til uddannelsesformål. Til produktion, implementer ordentlig brugerstyring, database persistens, rate limiting og sikkerhedshærdning.*
