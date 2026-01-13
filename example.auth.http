@@ -1,0 +1,84 @@
+###############################################################################
+# Northwind.App.Backend - Autentificerings Tests
+# 
+# Denne fil indeholder alle autentificerings-relaterede endpoints
+###############################################################################
+
+### Variabler
+@baseUrl = https://northwind-backend-b088.onrender.com
+#@baseUrl = http://localhost:5000
+
+# Token gemmes her efter login
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJzdWIiOiJ1c2VyIiwianRpIjoiZjMyMDI5MmItNjQ1MS00ZDBlLWI0OWItYWRlMjcyNGQ4NTQ5IiwiZXhwIjoxNzY4MzQxMzY2LCJpc3MiOiJOb3J0aHdpbmQuQXBwLkJhY2tlbmQiLCJhdWQiOiJOb3J0aHdpbmQuQXBwLkZyb250ZW5kIn0.QN8nG7m94k-IBLfos9-jA37beC94dIqA0ETvaGOSnQU
+@refreshToken = your_refresh_token_here
+
+###############################################################################
+# AUTENTIFICERINGS ENDPOINTS
+###############################################################################
+
+### Login - Admin bruger
+# @name loginAdmin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+### 
+@accessTokenAdmin={{loginAdmin.response.body.accessToken}}
+@refreshTokenAdmin={{loginAdmin.response.body.refreshToken}}
+###
+
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{accessTokenAdmin}}
+
+### Login - Almindelig bruger
+# @name loginUser
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "user"
+}
+
+### 
+@accessTokenUser={{loginUser.response.body.accessToken}}
+@refreshTokenUser={{loginUser.response.body.refreshToken}}
+###
+
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{accessTokenUser}}
+
+### Logout nuværende session (invaliderer kun nuværende refresh token)
+POST {{baseUrl}}/api/auth/logout
+Authorization: Bearer {{accessTokenUser}}
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshTokenUser}}"
+}
+
+### Forny Access Token
+# @name refreshUser
+POST {{baseUrl}}/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshTokenUser}}"
+}
+
+###############################################################################
+# BESKYTTEDE ENDPOINTS (Kræver autentificering)
+###############################################################################
+
+### Hent alle kunder (Kræver autentificering)
+GET {{baseUrl}}/api/customers
+Authorization: Bearer {{accessTokenUser}}
+
+### Hent kunder med paginering (Kræver autentificering)
+GET {{baseUrl}}/api/customers?skip=0&take=2
+Authorization: Bearer {{accessTokenUser}}
+

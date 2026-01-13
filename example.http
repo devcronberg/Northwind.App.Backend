@@ -1,0 +1,112 @@
+###############################################################################
+# Northwind.App.Backend - REST API Test Fil
+# 
+# Denne fil kan bruges med REST Client extension i VS Code
+# Installer extension: "REST Client" af Huachao Mao
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+#
+# Brug:
+# 1. Klik "Send Request" over en request
+# 2. Se svar i højre panel
+# 3. Variabler er defineret i toppen
+###############################################################################
+
+### Variabler
+#@baseUrl = http://localhost:5000
+@baseUrl = https://northwind-backend-b088.onrender.com
+
+# Indsæt token her efter login (eller brug example.auth.http)
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsInN1YiI6ImFkbWluIiwianRpIjoiNjQ2ZTM2MWQtNDkzMC00YWJmLWE2NDMtOWNjMzYwOTRkMDA2IiwiZXhwIjoxNzY4MzQxMDczLCJpc3MiOiJOb3J0aHdpbmQuQXBwLkJhY2tlbmQiLCJhdWQiOiJOb3J0aHdpbmQuQXBwLkZyb250ZW5kIn0.F8cVgnCfwyJgrIOamtVldfWuTbRG9ie_sKYSXIodrzM
+@refreshToken = your_refresh_token_here
+
+###############################################################################
+# SYSTEM ENDPOINTS
+###############################################################################
+
+### Health Check - Liveness Probe (Basis check)
+GET {{baseUrl}}/health/live
+
+### Health Check - Readiness Probe (Med dependency checks)
+GET {{baseUrl}}/health/ready
+
+### Hent API Version
+GET {{baseUrl}}/version
+
+### Hent Runtime Configuration
+GET {{baseUrl}}/config
+
+### Test Echo Endpoint (Returnerer text parameter)
+GET {{baseUrl}}/test?text=Hello from REST Client
+
+### Test Echo Endpoint (Tom respons hvis ingen parameter)
+GET {{baseUrl}}/test
+
+### Test Fejlhåndtering (Kaster exception for at demo Problem Details)
+GET {{baseUrl}}/test/error
+
+###############################################################################
+# OFFENTLIGE KUNDE ENDPOINTS (Ingen autentificering påkrævet)
+###############################################################################
+
+### Hent alle kunder (Standard paginering)
+GET {{baseUrl}}/api/public/customers
+
+### Hent kunder med paginering
+GET {{baseUrl}}/api/public/customers?skip=0&take=10
+
+### Hent kunde efter ID
+GET {{baseUrl}}/api/public/customers/1
+
+### Hent kunde med ordrer
+GET {{baseUrl}}/api/public/customers/1/orders
+
+### Hent kunde med begrænsede ordrer
+GET {{baseUrl}}/api/public/customers/1/orders?maxOrders=5
+
+### Hent alle kunder med omsætning (Sorteret efter omsætning faldende)
+GET {{baseUrl}}/api/public/customers-with-revenue
+
+### Hent kunder med omsætning (Pagineret)
+GET {{baseUrl}}/api/public/customers-with-revenue?skip=0&take=5
+
+### Opret ny kunde
+POST {{baseUrl}}/api/public/customers
+Content-Type: application/json
+
+{
+  "customerName": "Test Company",
+  "contactName": "John Doe",
+  "address": "123 Test Street",
+  "city": "Copenhagen",
+  "postalCode": "1000",
+  "country": "Denmark"
+}
+
+### Opdater kunde (Fuld opdatering - alle felter påkrævet)
+PUT {{baseUrl}}/api/public/customers/1
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "customerName": "Test Company Updated",
+  "contactName": "Jane Doe",
+  "address": "456 Updated Street",
+  "city": "Aarhus",
+  "postalCode": "8000",
+  "country": "Denmark"
+}
+
+### Delvis opdatering af kunde (Kun specificerede felter)
+PATCH {{baseUrl}}/api/public/customers/1
+Content-Type: application/json
+
+{
+  "contactName": "John Smith",
+  "city": "Copenhagen"
+}
+
+### Slet kunde
+DELETE {{baseUrl}}/api/public/customers/1
+
+
+
