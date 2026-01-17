@@ -77,6 +77,12 @@ ENV ASPNETCORE_URLS=http://+:${PORT:-8080}
 # This disables developer exception pages and enables optimizations
 ENV ASPNETCORE_ENVIRONMENT=Production
 
+# Health check - verifies the container is healthy and ready to serve traffic
+# Runs every 30 seconds, times out after 3 seconds, starts checking after 10 seconds
+# Checks the /health/live endpoint which returns 200 if the application is running
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:${PORT:-8080}/health/live || exit 1
+
 # Define how to start the application
 # Uses 'dotnet' to run the compiled DLL
 ENTRYPOINT ["dotnet", "Northwind.App.Backend.dll"]

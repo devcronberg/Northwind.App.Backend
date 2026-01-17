@@ -2,12 +2,23 @@ using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Northwind.App.Backend.Models;
 using Serilog;
+
+// Load .env file if it exists (for local development)
+try
+{
+    Env.Load();
+}
+catch (Exception)
+{
+    // .env file not found - continue with environment variables or appsettings.json defaults
+}
 
 // Configure Serilog bootstrap logger for startup errors
 Log.Logger = new LoggerConfiguration()
@@ -134,58 +145,166 @@ try
     app.MapHealthChecks("/health");
 
     // Root endpoint - API information page (reads app name from assembly metadata)
-    app.MapGet("/", () =>
+    app.MapGet("/", (HttpContext context) =>
     {
         var assembly = System.Reflection.Assembly.GetExecutingAssembly();
         var productName = assembly.GetCustomAttribute<System.Reflection.AssemblyProductAttribute>()?.Product ?? "Northwind API Backend";
         var version = assembly.GetName().Version?.ToString() ?? "0.0.0";
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+
+        // Set no-cache headers
+        context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+        context.Response.Headers["Pragma"] = "no-cache";
+        context.Response.Headers["Expires"] = "0";
 
         var html = $$"""
         <!DOCTYPE html>
-        <html lang="en">
+        <html lang="da">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>{{productName}}</title>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.3/dist/semantic.min.css">
             <style>
                 body {
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-                    max-width: 800px;
-                    margin: 50px auto;
-                    padding: 20px;
-                    background: #f5f5f5;
+                    background: greywhitesmoke;
+                    min-height: 100vh;
+                    padding: 2rem 1rem;
                 }
-                .container {
+                .main-container {
+                    max-width: 900px;
+                    margin: 0 auto;
+                }
+                .ui.segment.hero {
                     background: white;
-                    padding: 2rem;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    border: none;
+                    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
                 }
-                h1 { color: #0066cc; margin-top: 0; }
-                .info { background: #f0f8ff; padding: 15px; border-radius: 5px; margin: 20px 0; }
-                .links { margin-top: 20px; }
-                .links a { display: inline-block; margin: 5px 10px 5px 0; padding: 8px 16px; background: #0078d4; color: white; text-decoration: none; border-radius: 4px; }
-                .links a:hover { background: #106ebe; }
-                .version { color: #666; font-size: 0.9em; margin-top: 10px; }
+                .version-badge {
+                    position: absolute;
+                    top: 1rem;
+                    right: 1rem;
+                }
+                .api-title {
+                    color: #667eea;
+                    margin-top: 0.5rem;
+                }
+                .feature-icon {
+                    color: #667eea !important;
+                }
             </style>
         </head>
         <body>
-            <div class="container">
-                <h1>🚀 {{productName}}</h1>
-                <p class="version">Version {{version}}</p>
-                <p>This is a <strong>REST API backend</strong> application built with ASP.NET Core.</p>
-                
-                <div class="info">
-                    <p><strong>ℹ️ Information:</strong></p>
-                    <p>This is a demo/test API demonstrating modern web API best practices including JWT authentication, Entity Framework Core, and OpenAPI documentation.</p>
-                </div>
+            <div class="main-container">
+                <div class="ui segment hero">
+                    <span class="ui blue label version-badge">v{{version}}</span>
+                    
+                    <h1 class="ui header api-title">
+                        <i class="server icon"></i>
+                        <div class="content">
+                            {{productName}}
+                            <div class="sub header">RESTful API bygget med ASP.NET Core</div>
+                        </div>
+                    </h1>
 
-                <div class="links">
-                    <a href="/swagger">📖 API Documentation (Swagger)</a>
-                    <a href="/health/live">✅ Health Check</a>
-                    <a href="/version">📋 Version</a>
-                    <a href="/appname">📛 App Name</a>
-                    <a href="/appinfo">ℹ️ App Info</a>
+                    <div class="ui divider"></div>
+
+                    <div class="ui info message">
+                        <div class="header">
+                            <i class="info circle icon"></i>
+                            Om denne API
+                        </div>
+                        <p>Dette er en demo/reference implementering der demonstrerer moderne web API best practices inklusiv JWT autentificering, Entity Framework Core, OpenAPI dokumentation og Docker containerisering.</p>
+                    </div>
+
+                    <h3 class="ui header">
+                        <i class="linkify icon feature-icon"></i>
+                        <div class="content">Hurtige Links</div>
+                    </h3>
+
+                    <div class="ui stackable four column grid">
+                        <div class="column">
+                            <a href="/swagger" class="ui fluid blue button">
+                                <i class="book icon"></i>
+                                API Dokumentation
+                            </a>
+                        </div>
+                        <div class="column">
+                            <a href="/health/live" class="ui fluid green button">
+                                <i class="heartbeat icon"></i>
+                                Sundhedstjek
+                            </a>
+                        </div>
+                        <div class="column">
+                            <a href="/appinfo" class="ui fluid teal button">
+                                <i class="info icon"></i>
+                                App Info
+                            </a>
+                        </div>
+                        <div class="column">
+                            <a href="https://northwind-backend-b088.onrender.com/" target="_blank" class="ui fluid purple button">
+                                <i class="cloud icon"></i>
+                                Live Demo
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="ui divider"></div>
+
+                    <h3 class="ui header">
+                        <i class="shield alternate icon feature-icon"></i>
+                        <div class="content">Funktioner</div>
+                    </h3>
+
+                    <div class="ui three column stackable grid">
+                        <div class="column">
+                            <div class="ui segment center aligned">
+                                <i class="huge lock icon" style="color: #21ba45;"></i>
+                                <h4>JWT Autentificering</h4>
+                                <p>Sikker token-baseret autentificering med refresh tokens</p>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="ui segment center aligned">
+                                <i class="huge database icon" style="color: #2185d0;"></i>
+                                <h4>Entity Framework</h4>
+                                <p>Code-first ORM med SQLite database understøttelse</p>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="ui segment center aligned">
+                                <i class="huge docker icon" style="color: #00b5ad;"></i>
+                                <h4>Docker Klar</h4>
+                                <p>Containeriseret deployment med sundhedstjek</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui divider"></div>
+
+                    <div class="ui horizontal list">
+                        <div class="item">
+                            <i class="code icon"></i>
+                            <div class="content">
+                                <div class="header">Framework</div>
+                                .NET 10.0
+                            </div>
+                        </div>
+                        <div class="item">
+                            <i class="github icon"></i>
+                            <div class="content">
+                                <div class="header">Repository</div>
+                                <a href="https://github.com/devcronberg/Northwind.App.Backend" target="_blank">GitHub</a>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <i class="lightning icon"></i>
+                            <div class="content">
+                                <div class="header">Miljø</div>
+                                {{environment}}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </body>
