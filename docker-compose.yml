@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  northwind-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: northwind-backend
+    ports:
+      - "5033:5033"
+    environment:
+      - PORT=5033
+      - ASPNETCORE_ENVIRONMENT=Development
+    env_file:
+      - .env  # Optional: Load environment variables from .env file if it exists
+    volumes:
+      # Mount Assets folder for SQLite database (optional for development)
+      - ./Assets:/app/Assets
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5033/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+# Usage:
+# 1. Create a .env file from .env.example (optional)
+# 2. Run: docker-compose up --build
+# 3. Access API at: http://localhost:5033
+# 4. Access Swagger at: http://localhost:5033/swagger
+#
+# Notes:
+# - Environment variables from .env file override appsettings.json
+# - If .env doesn't exist, it falls back to appsettings.json defaults
+# - For production, use environment variables directly (not .env files)
