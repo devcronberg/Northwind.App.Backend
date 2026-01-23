@@ -108,5 +108,23 @@ Content-Type: application/json
 ### Slet kunde
 DELETE {{baseUrl}}/api/public/customers/1
 
+###############################################################################
+# OPENROUTER AI ENDPOINTS
+###############################################################################
+
+### Test OpenRouter AI med simpelt spørgsmål
+GET {{baseUrl}}/api/openrouter/test?prompt=What is the capital of Denmark?
+
+### Test OpenRouter AI med teknisk spørgsmål
+GET {{baseUrl}}/api/openrouter/test?prompt=Explain what REST API is in one sentence
+
+### Find opskrift baseret på produkter (flere produkter)
+GET {{baseUrl}}/api/openrouter/FindOpskrift?productIds=1&productIds=2&productIds=3
+
+### Find opskrift baseret på produkter (to produkter)
+GET {{baseUrl}}/api/openrouter/FindOpskrift?productIds=11&productIds=42
+
+### Find opskrift med kun ét produkt
+GET {{baseUrl}}/api/openrouter/FindOpskrift?productIds=5
 
 
