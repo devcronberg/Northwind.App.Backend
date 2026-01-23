@@ -42,9 +42,9 @@ public static class OpenRouterHelper
         try
         {
             logger.LogInformation("Calling OpenRouter API with model {Model}", model);
-            
+
             var request = new HttpRequestMessage(HttpMethod.Post, url);
-            
+
             // Set headers
             request.Headers.Add("Authorization", $"Bearer {apiKey}");
 
@@ -67,13 +67,13 @@ public static class OpenRouterHelper
 
             // Send request
             var response = await _httpClient.SendAsync(request);
-            
+
             if (!response.IsSuccessStatusCode)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
-                logger.LogError("OpenRouter API returned error: {StatusCode} - {Error}", 
+                logger.LogError("OpenRouter API returned error: {StatusCode} - {Error}",
                     response.StatusCode, errorContent);
-                
+
                 return new OpenRouterResponse
                 {
                     Success = false,
@@ -84,14 +84,14 @@ public static class OpenRouterHelper
             // Parse response
             var responseJson = await response.Content.ReadAsStringAsync();
             using var doc = JsonDocument.Parse(responseJson);
-            
+
             var content = doc.RootElement
                 .GetProperty("choices")[0]
                 .GetProperty("message")
                 .GetProperty("content")
                 .GetString();
 
-            logger.LogInformation("OpenRouter API call successful, received {Length} characters", 
+            logger.LogInformation("OpenRouter API call successful, received {Length} characters",
                 content?.Length ?? 0);
 
             return new OpenRouterResponse
